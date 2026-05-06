@@ -1,10 +1,11 @@
 import React, { useState, useCallback, useRef, useMemo } from 'react';
 import './sheets.css';
+import сontextMenu from './contextMenu.jsx';
 
 const DEFAULT_COL_WIDTH = 100;
 const DEFAULT_ROW_HEIGHT = 30;
 
-function sheets({ 
+function Sheets({ 
   rows, 
   cols, 
   data, 
@@ -14,6 +15,10 @@ function sheets({
   onCellSelect, 
   onCellDoubleClick, 
   onCellEdit,
+  onAddRow,
+  onDeleteRow,
+  onAddColumn,
+  onDeleteColumn,
   getCellValue 
 }) {
   const [scrollTop, setScrollTop] = useState(0);
@@ -21,6 +26,7 @@ function sheets({
   const [colWidths, setColWidths] = useState({});
   const [rowHeights, setRowHeights] = useState({});
   const [editingValue, setEditingValue] = useState('');
+  const [contextMenu, setContextMenu] = useState(null);
   const containerRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -68,8 +74,23 @@ function sheets({
     }
   }, [onCellEdit, editingValue, getCellValue]);
 
+  const handleContextMenu = useCallback((e, row, col) => {
+    e.preventDefault();
+    setContextMenu({
+      x: e.clientX,
+      y: e.clientY,
+      row,
+      col
+    });
+  }, []);
+
+  const closeContextMenu = useCallback(() => {
+    setContextMenu(null);
+  }, []);
+
   const handleResizeStart = useCallback((e, index, type) => {
     e.preventDefault();
+    e.stopPropagation();
     const startX = e.clientX;
     const startY = e.clientY;
     const startWidth = colWidths[index] || DEFAULT_COL_WIDTH;
@@ -165,6 +186,7 @@ function sheets({
               <div
                 key={`header-${col}`}
                 className="column-header"
+                onContextMenu={(e) => handleContextMenu(e, 0, col)}
                 style={{
                   width: getColWidth(col),
                   left: offsetX + (col - startCol) * DEFAULT_COL_WIDTH,
@@ -194,6 +216,7 @@ function sheets({
               {/* Заголовок строки */}
               <div 
                 className="row-header"
+                onContextMenu={(e) => handleContextMenu(e, row, 0)}
                 style={{ width: 50, position: 'sticky', left: 0, zIndex: 2 }}
               >
                 {row + 1}
@@ -220,6 +243,7 @@ function sheets({
                     }}
                     onClick={(e) => handleCellClick(row, col, e)}
                     onDoubleClick={() => handleDoubleClick(row, col)}
+                    onContextMenu={(e) => handleContextMenu(e, row, col)}
                   >
                     {isEditing ? (
                       <input
@@ -241,8 +265,20 @@ function sheets({
           ))}
         </div>
       </div>
+
+      {contextMenu && (
+        <сontextMenu
+          x={contextMenu.x}
+          y={contextMenu.y}
+          onAddRow={() => onAddRow(contextMenu.row)}
+          onDeleteRow={() => onDeleteRow(contextMenu.row)}
+          onAddColumn={() => onAddColumn(contextMenu.col)}
+          onDeleteColumn={() => onDeleteColumn(contextMenu.col)}
+          onClose={closeContextMenu}
+        />
+      )}
     </div>
   );
 }
 
-export default sheets;
+export default Sheets;
