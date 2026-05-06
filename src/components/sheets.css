@@ -1,0 +1,120 @@
+.spreadsheet-container {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.spreadsheet-scroll {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  position: relative;
+}
+
+.spreadsheet-content {
+  position: relative;
+}
+
+.spreadsheet-header-row {
+  background: #f0f0f0;
+  border-bottom: 1px solid #ccc;
+  display: flex;
+}
+
+.column-header {
+  border-right: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 12px;
+  background: #f0f0f0;
+  position: relative;
+  user-select: none;
+}
+
+.corner-header {
+  background: #f0f0f0;
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
+
+.row-header {
+  background: #f0f0f0;
+  border-bottom: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  user-select: none;
+  position: relative;
+}
+
+.spreadsheet-row {
+  display: flex;
+}
+
+.cell {
+  border-right: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 2px 4px;
+  display: flex;
+  align-items: center;
+  background: white;
+  cursor: cell;
+  overflow: hidden;
+}
+
+.cell.selected {
+  background: #e3f2fd;
+  border-color: #1976d2;
+}
+
+.cell.editing {
+  padding: 0;
+}
+
+.cell-value {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.cell-input {
+  width: 100%;
+  height: 100%;
+  border: 2px solid #1976d2;
+  padding: 2px 4px;
+  font-size: inherit;
+  outline: none;
+}
+
+.resize-handle {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  cursor: col-resize;
+  z-index: 1;
+}
+
+.resize-handle:hover {
+  background: #1976d2;
+}
+
+.row-resize {
+  right: auto;
+  bottom: 0;
+  left: 0;
+  top: auto;
+  width: 100%;
+  height: 5px;
+  cursor: row-resize;
+}
+
+.row-resize:hover {
+  background: #1976d2;
+}

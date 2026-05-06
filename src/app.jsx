@@ -1,4 +1,6 @@
 import React, { useState, useCallback, useRef } from 'react';
+import Spreadsheet from './components/sheets.jsx';
+import FormulaBar from './components/formula.jsx';
 import './App.css';
 
 const DEFAULT_ROWS = 100;
@@ -126,9 +128,32 @@ function App() {
 
   return (
     <div className="app">
-    <h1>Чето работает</h1>
-  </div>
-  )
+      <FormulaBar 
+        value={getSelectedValue()} 
+        onFormulaChange={(value) => {
+          if (selectedCell) {
+            updateCell(selectedCell.row, selectedCell.col, value);
+          }
+        }}
+      />
+      <Spreadsheet
+        rows={DEFAULT_ROWS}
+        cols={DEFAULT_COLS}
+        data={data}
+        selectedCell={selectedCell}
+        selectedRange={selectedRange}
+        editingCell={editingCell}
+        onCellSelect={handleCellSelect}
+        onCellDoubleClick={handleCellDoubleClick}
+        onCellEdit={handleCellEdit}
+        onAddRow={addRow}
+        onDeleteRow={deleteRow}
+        onAddColumn={addColumn}
+        onDeleteColumn={deleteColumn}
+        getCellValue={getCellValue}
+      />
+    </div>
+  );
 }
 
 export default App;
